@@ -10,7 +10,12 @@ class ModbusReadable extends React.Component{
       negativeEnergyAccumulator: 0,
       signalQuality: 0
     }, 
-    noOfRegisters: 0
+    noOfRegisters: 0,
+    interval: setInterval(this.intervalLog, 100)
+  }
+
+  intervalLog(){
+    console.log("setting interval...");
   }
 
   updatePage(){
@@ -24,17 +29,19 @@ class ModbusReadable extends React.Component{
     .then(res => {
       this.setState({ParsedData:res.data});
     }) 
+
+    this.countUpdate();
   }
 
   componentDidMount(){
-    this.updatePage();
+    this.state.interval = setInterval(() => {
+      this.updatePage();
+    }, 2000);
   }
 
-  componentDidUpdate(prevProps: any, prepState: any){
-    if(this.state.count !== prepState.count){
-      this.updatePage()
-    }
-  } 
+  componentWillUnmount() {
+    clearInterval(this.state.interval);
+  }
 
   countUpdate(){
     if(this.state.count >= this.state.noOfRegisters){
@@ -52,7 +59,7 @@ class ModbusReadable extends React.Component{
     return(
       <div>
         <br/>
-        <button onClick={() => this.countUpdate()}>Update values</button>
+        
         <p>The current values: </p>
         <p>Negative Energy Accumulator: {parsedData.negativeEnergyAccumulator}</p>
         <p>Signal Quality: {parsedData.signalQuality}</p>
@@ -62,3 +69,13 @@ class ModbusReadable extends React.Component{
 }
 
 export default ModbusReadable; 
+
+/*
+  componentDidUpdate(prevProps: any, prepState: any){
+    if(this.state.count !== prepState.count){
+      this.updatePage()
+    }
+  } 
+
+<button onClick={() => this.countUpdate()}>Update values</button>
+*/
