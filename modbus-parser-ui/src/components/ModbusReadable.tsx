@@ -1,5 +1,5 @@
 import React from 'react';
-import ParsedDataService from '../api/ParsedDataService'; 
+import DataService from '../api/DataService'; 
 import ConvertedData from '../interfaces/ConvertedData.interface';
 import RawData from '../interfaces/RawData.interface';
 import { Formik, Form, Field } from 'formik'; 
@@ -17,15 +17,15 @@ class ModbusReadable extends React.Component{
   }
 
   updatePage(){
-    ParsedDataService.getNoOfRegisters()
+    DataService.getNoOfRegisters()
     .then(res => {
       this.setState({noOfRegisters: res.data})
     })
 
     const count = this.state.count; 
-    ParsedDataService.retrieveParsedData(count)
+    DataService.retrieveConvertedData(count)
     .then(res => {
-      this.setState({ParsedData:res.data});
+      this.setState({convertedData:res.data});
     }) 
   }
 

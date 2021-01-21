@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { API_URL } from '../Constants';
 
-class ParsedDataService {
-  retrieveParsedData(id: number){
+class DataService {
+  retrieveConvertedData(id: number){
     return axios.get(`${API_URL}/register/${id}`);
   } 
 
@@ -11,4 +11,4 @@ class ParsedDataService {
   }
 }
 
-export default new ParsedDataService()
+export default new DataService()
