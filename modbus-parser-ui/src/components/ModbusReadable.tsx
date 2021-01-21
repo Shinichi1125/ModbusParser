@@ -13,7 +13,6 @@ class ModbusReadable extends React.Component{
       signalQuality: 0
     }, 
     noOfRegisters: 0,
-    
   }
 
   updatePage(){
@@ -49,8 +48,12 @@ class ModbusReadable extends React.Component{
     }
   }
 
-  onSubmit(){
-
+  onSubmit(values: RawData){
+    DataService.saveRegister(values)
+    .then(res => {
+      console.log("the content of res.data: ");
+      console.log(res.data);
+    })
   }
 
   render(){
@@ -68,7 +71,6 @@ class ModbusReadable extends React.Component{
         <p>The current values: </p>
         <p>Negative Energy Accumulator: {convertedData.negativeEnergyAccumulator}</p>
         <p>Signal Quality: {convertedData.signalQuality}</p>
-        <div>
         <div className="object-details">
           <h3>Enter New Values</h3>
           <div>
@@ -99,11 +101,10 @@ class ModbusReadable extends React.Component{
                   </Form>
                 )
               }
-            </Formik>
-            
+            </Formik>        
           </div>
         </div>
-      </div>
+        <br/>
       </div>
     )
   }
@@ -127,4 +128,14 @@ componentDidMount(){
 componentWillUnmount() {
     clearInterval(this.state.interval);
   }
+
+let savedRegister = {
+      reg21: this.state.savedRegister.reg21,
+      reg22: this.state.savedRegister.reg22,
+      reg92: this.state.savedRegister.reg92,
+    }
+<p>
+          Saved register... reg21: {savedRegister.reg21}, reg22: {savedRegister.reg22}, reg92: {savedRegister.reg92}
+        </p>
+
 */
