@@ -1,11 +1,11 @@
 package com.modbusparser.model;
 
-public class ParsedData {
+public class ConvertedData {
 	
 	private int negativeEnergyAccumulator;
 	private int signalQuality;
 	
-	public ParsedData() {
+	public ConvertedData() {
 		
 	}
 	
