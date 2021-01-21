@@ -1,6 +1,6 @@
 import React from 'react';
 import ParsedDataService from '../api/ParsedDataService'; 
-import ParsedData from '../interfaces/ParsedData.interface';
+import ConvertedData from '../interfaces/ConvertedData.interface';
 import RawData from '../interfaces/RawData.interface';
 import { Formik, Form, Field } from 'formik'; 
 
@@ -8,7 +8,7 @@ class ModbusReadable extends React.Component{
 
   state = {
     count: 1,
-    ParsedData: {
+    convertedData: {
       negativeEnergyAccumulator: 0,
       signalQuality: 0
     }, 
@@ -54,8 +54,8 @@ class ModbusReadable extends React.Component{
   }
 
   render(){
-    let parsedData: ParsedData;
-    parsedData = this.state.ParsedData; 
+    let convertedData: ConvertedData;
+    convertedData = this.state.convertedData; 
 
     let init: RawData = {
       reg21: '', reg22: '', reg92: ''
@@ -66,8 +66,8 @@ class ModbusReadable extends React.Component{
         <br/>
         <button onClick={() => this.countUpdate()}>Update values</button>
         <p>The current values: </p>
-        <p>Negative Energy Accumulator: {parsedData.negativeEnergyAccumulator}</p>
-        <p>Signal Quality: {parsedData.signalQuality}</p>
+        <p>Negative Energy Accumulator: {convertedData.negativeEnergyAccumulator}</p>
+        <p>Signal Quality: {convertedData.signalQuality}</p>
         <div>
         <div className="object-details">
           <h3>Enter New Values</h3>
