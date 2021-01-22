@@ -20,27 +20,23 @@ class ModbusReadable extends React.Component{
   updatePage(){
     DataService.retrieveAllConvertedData()
     .then(res => {
-      //console.log("Retrieved data: ");
-      //console.log(res.data);
       this.setState({
         allRegisters:[...res.data]
       })
-      console.log("allRegisters: ");
-      console.log(this.state.allRegisters);
+      //console.log("allRegisters: ");
+      //console.log(this.state.allRegisters);
     })
 
     DataService.getNoOfRegisters()
     .then(res => {
       this.setState({noOfRegisters: res.data})
     })
-
+/*
     const count = this.state.count; 
     DataService.retrieveConvertedData(count)
     .then(res => {
       this.setState({convertedData:res.data});
-    }) 
-
-    //console.log("The number of registers: " + this.state.noOfRegisters);
+    }) */
   }
 
   componentDidMount(){
@@ -63,13 +59,8 @@ class ModbusReadable extends React.Component{
     }
   }
 
-  async onSubmit(values: RawData){
-    await DataService.saveRegister(values)
-
-    /*.then(res => {
-      console.log("the content of res.data: ");
-      console.log(res.data);
-    })*/
+  onSubmit(values: RawData){
+    DataService.saveRegister(values)
   }
 
   render(){
@@ -83,11 +74,9 @@ class ModbusReadable extends React.Component{
     return(
       <div>
         <br/>
-        <button onClick={() => this.countUpdate()}>Update values</button>
-        <p>The current values: </p>
-        <p>Negative Energy Accumulator: {convertedData.negativeEnergyAccumulator}</p>
-        <p>Signal Quality: {convertedData.signalQuality}</p>
-        <div className="object-details">
+        <button className="update-button" onClick={() => this.countUpdate()}>Update the graph</button>
+        <br/>
+        <div className="input-fields">
           <h3>Enter New Values</h3>
           <div>
             <Formik
@@ -99,21 +88,15 @@ class ModbusReadable extends React.Component{
                 (props) => (
                   <Form>
                     <div className="form-group">
-                    <fieldset>
-                      <Field type="text" name="reg21" placeholder="reg21" size="35"/>
-                    </fieldset>
+                      <Field type="text" name="reg21" placeholder="reg21" size="45"/>
                     </div>
                     <div className="form-group">
-                    <fieldset>
-                      <Field type="text" name="reg22" placeholder="reg22" size="35"/>
-                    </fieldset>
+                      <Field type="text" name="reg22" placeholder="reg22" size="45"/>
                     </div>
                     <div className="form-group">
-                    <fieldset>
-                      <Field type="text" name="reg92" placeholder="reg92" size="35"/>
-                    </fieldset>
+                      <Field type="text" name="reg92" placeholder="reg92" size="45"/>
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="submit-button">Submit</button>
                   </Form>
                 )
               }
@@ -121,6 +104,8 @@ class ModbusReadable extends React.Component{
           </div>
         </div>
         <br/>
+        <div className="graphs">
+        <h3>Negative Energy Accumulator</h3>
         <LineChart width={600} height={300} data={this.state.allRegisters}>
           <Line type="monotone" dataKey="negativeEnergyAccumulator" stroke="#8884d8" />
           <CartesianGrid stroke="#ccc" />
@@ -129,6 +114,7 @@ class ModbusReadable extends React.Component{
           <Tooltip />
         </LineChart>
         <br/>
+        <h3>Signal Quality</h3>
         <LineChart width={600} height={300} data={this.state.allRegisters}>
           <Line type="monotone" dataKey="signalQuality" stroke="#8884d8" />
           <CartesianGrid stroke="#ccc" />
@@ -136,6 +122,7 @@ class ModbusReadable extends React.Component{
           <YAxis />
           <Tooltip />
         </LineChart>
+        </div>
       </div>
     )
   }
@@ -143,30 +130,3 @@ class ModbusReadable extends React.Component{
 
 export default ModbusReadable; 
 
-/*
-//interval: setInterval(this.intervalLog, 100)
-
-intervalLog(){
-    //console.log("setting interval...");
-  }
-
-componentDidMount(){
-    this.state.interval = setInterval(() => {
-      this.updatePage();
-    }, 2000);
-  }
-
-componentWillUnmount() {
-    clearInterval(this.state.interval);
-  }
-
-let savedRegister = {
-      reg21: this.state.savedRegister.reg21,
-      reg22: this.state.savedRegister.reg22,
-      reg92: this.state.savedRegister.reg92,
-    }
-<p>
-          Saved register... reg21: {savedRegister.reg21}, reg22: {savedRegister.reg22}, reg92: {savedRegister.reg92}
-        </p>
-
-*/
