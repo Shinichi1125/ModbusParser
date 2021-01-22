@@ -3,6 +3,10 @@ import { API_URL } from '../Constants';
 import RawData from '../interfaces/RawData.interface';
 
 class DataService {
+  retrieveAllConvertedData(){
+    return axios.get(`${API_URL}/all-registers`);
+  }
+
   retrieveConvertedData(id: number){
     return axios.get(`${API_URL}/register/${id}`);
   } 

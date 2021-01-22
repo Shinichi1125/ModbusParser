@@ -13,9 +13,21 @@ class ModbusReadable extends React.Component{
       signalQuality: 0
     }, 
     noOfRegisters: 0,
+    allRegisters: new Array<ConvertedData>()
   }
 
   updatePage(){
+    DataService.retrieveAllConvertedData()
+    .then(res => {
+      //console.log("Retrieved data: ");
+      //console.log(res.data);
+      this.setState({
+        allRegisters:[...this.state.allRegisters, ...res.data]
+      })
+      console.log("allRegisters: ");
+      console.log(this.state.allRegisters);
+    })
+
     DataService.getNoOfRegisters()
     .then(res => {
       this.setState({noOfRegisters: res.data})
@@ -26,6 +38,8 @@ class ModbusReadable extends React.Component{
     .then(res => {
       this.setState({convertedData:res.data});
     }) 
+
+    //console.log("The number of registers: " + this.state.noOfRegisters);
   }
 
   componentDidMount(){
@@ -50,10 +64,10 @@ class ModbusReadable extends React.Component{
 
   onSubmit(values: RawData){
     DataService.saveRegister(values)
-    .then(res => {
+    /*.then(res => {
       console.log("the content of res.data: ");
       console.log(res.data);
-    })
+    })*/
   }
 
   render(){

@@ -1,5 +1,7 @@
 package com.modbusparser.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -47,25 +49,39 @@ public class RegisterController {
 	int getLowByte(int number) {
 		int lowByte =  0;
 		String bin = Integer.toBinaryString(number);
-		//LOGGER.info("bin: " + bin);
 		String lowByteStr = bin.substring(bin.length() - 8);
-		//LOGGER.info("lowByteStr: " + lowByteStr );
 		lowByte = Integer.parseInt(lowByteStr, 2);
 		return lowByte;
 	}
 	
-	@RequestMapping(value = "/register/{id}", method = RequestMethod.GET)
-	public ConvertedData getConvertedData(@PathVariable("id") int id) {
+	ConvertedData toHumanReadable(Register register) {
 		ConvertedData convertedData = new ConvertedData();
-		Register register = repository.findById(id).get();
 		
 		int combined = combineRegisters(register.getReg21(), register.getReg22());
 		convertedData.setNegativeEnergyAccumulator(convertToSigned(combined));
-		//LOGGER.info("reg92: " + register.getReg92());
 		int lowByte = getLowByte(register.getReg92());
 		convertedData.setSignalQuality(lowByte);
-				
+		
 		return convertedData;
+	}
+	
+	@RequestMapping(value = "/register/{id}", method = RequestMethod.GET)
+	public ConvertedData getConvertedData(@PathVariable("id") int id) {
+		Register register = repository.findById(id).get();
+		ConvertedData convertedData = toHumanReadable(register);
+		return convertedData;
+	}
+	
+	@RequestMapping(value = "/all-registers", method = RequestMethod.GET)
+	public List<ConvertedData> getAllConvertedData() {
+		List<ConvertedData> convertedDataList = new ArrayList<ConvertedData>();
+		List<Register> registersList = repository.findAll(); 
+		
+		for(Register register: registersList) {		
+			ConvertedData convertedData = toHumanReadable(register);
+			convertedDataList.add(convertedData);
+		}	
+		return convertedDataList;
 	}
 	
 	@RequestMapping(value = "/no-of-registers", method = RequestMethod.GET)
@@ -74,9 +90,14 @@ public class RegisterController {
 		return noOfRegisters; 
 	}
 	
+	// remove colons from the raw inputs
+	// because the raw inputs consist of the register number, colon, and the value 
+	// like this. 22:65535 92:806, and all that is needed is the value
 	String parseString(String rawString) {
 		String parsedString; 
 		
+		// split the raw data by colon, so the register number will be 
+		//stored in index 0, the value in index 1
 		String[] parsedStrings = rawString.split(":", 0);
 		parsedString = parsedStrings[1];
 		
@@ -88,22 +109,33 @@ public class RegisterController {
 			@RequestParam("reg21") String reg21,
 			@RequestParam("reg22") String reg22,
 			@RequestParam("reg92") String reg92) {
+		// EXAMPLE: When the input values for reg21, reg22, reg92 are 65480, 65535, 806 respectively
 		
-		RawRegister rawRegister = new RawRegister();
+		// Before storing them in rawRegister (data type: String)
+		// reg21: "21:65480"
+		// reg22: "22:65535"
+		// reg92: "92:806"
 		
+		RawRegister rawRegister = new RawRegister();	
 		rawRegister.setReg21(parseString(reg21));
 		rawRegister.setReg22(parseString(reg22));
 		rawRegister.setReg92(parseString(reg92));
 		
-		LOGGER.info("After parsing...");
-		LOGGER.info("reg21: " + rawRegister.getReg21());
-		LOGGER.info("reg22: " + rawRegister.getReg22());
-		LOGGER.info("reg92: " + rawRegister.getReg92());
+		// After storing them in rawRegister parsing the data 
+		// by the parseString method (data type: String)
+		// reg21: "65480"
+		// reg22: "65535"
+		// reg92: "806"
 		
 		Register register = new Register(); 
 		register.setReg21(Integer.parseInt(rawRegister.getReg21()));
 		register.setReg22(Integer.parseInt(rawRegister.getReg22()));
 		register.setReg92(Integer.parseInt(rawRegister.getReg92()));
+		
+		// After storing them in register (data type: int)
+		// reg21: 65480
+		// reg22: 65535
+		// reg92: 806
 		
 		return repository.save(register); 
 	}
