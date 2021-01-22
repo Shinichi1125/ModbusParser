@@ -116,26 +116,18 @@ public class RegisterController {
 		// reg22: "22:65535"
 		// reg92: "92:806"
 		
-		RawRegister rawRegister = new RawRegister();	
-		rawRegister.setReg21(parseString(reg21));
-		rawRegister.setReg22(parseString(reg22));
-		rawRegister.setReg92(parseString(reg92));
-		
 		// After storing them in rawRegister parsing the data 
 		// by the parseString method (data type: String)
-		// reg21: "65480"
-		// reg22: "65535"
-		// reg92: "806"
-		
-		Register register = new Register(); 
-		register.setReg21(Integer.parseInt(rawRegister.getReg21()));
-		register.setReg22(Integer.parseInt(rawRegister.getReg22()));
-		register.setReg92(Integer.parseInt(rawRegister.getReg92()));
-		
+		RawRegister rawRegister = new RawRegister();	
+		rawRegister.setReg21(parseString(reg21));    // "65480"
+		rawRegister.setReg22(parseString(reg22));    // "65535"
+		rawRegister.setReg92(parseString(reg92));    // "806"
+			
 		// After storing them in register (data type: int)
-		// reg21: 65480
-		// reg22: 65535
-		// reg92: 806
+		Register register = new Register(); 
+		register.setReg21(Integer.parseInt(rawRegister.getReg21()));    // 65480
+		register.setReg22(Integer.parseInt(rawRegister.getReg22()));    // 65535
+		register.setReg92(Integer.parseInt(rawRegister.getReg92()));    // 806
 		
 		return repository.save(register); 
 	}

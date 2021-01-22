@@ -3,6 +3,7 @@ import DataService from '../api/DataService';
 import ConvertedData from '../interfaces/ConvertedData.interface';
 import RawData from '../interfaces/RawData.interface';
 import { Formik, Form, Field } from 'formik'; 
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 class ModbusReadable extends React.Component{
 
@@ -22,7 +23,7 @@ class ModbusReadable extends React.Component{
       //console.log("Retrieved data: ");
       //console.log(res.data);
       this.setState({
-        allRegisters:[...this.state.allRegisters, ...res.data]
+        allRegisters:[...res.data]
       })
       console.log("allRegisters: ");
       console.log(this.state.allRegisters);
@@ -62,8 +63,9 @@ class ModbusReadable extends React.Component{
     }
   }
 
-  onSubmit(values: RawData){
-    DataService.saveRegister(values)
+  async onSubmit(values: RawData){
+    await DataService.saveRegister(values)
+
     /*.then(res => {
       console.log("the content of res.data: ");
       console.log(res.data);
@@ -119,6 +121,21 @@ class ModbusReadable extends React.Component{
           </div>
         </div>
         <br/>
+        <LineChart width={600} height={300} data={this.state.allRegisters}>
+          <Line type="monotone" dataKey="negativeEnergyAccumulator" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis />
+          <YAxis />
+          <Tooltip />
+        </LineChart>
+        <br/>
+        <LineChart width={600} height={300} data={this.state.allRegisters}>
+          <Line type="monotone" dataKey="signalQuality" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis />
+          <YAxis />
+          <Tooltip />
+        </LineChart>
       </div>
     )
   }
