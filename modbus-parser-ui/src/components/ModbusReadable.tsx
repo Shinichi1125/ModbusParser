@@ -9,10 +9,6 @@ class ModbusReadable extends React.Component{
 
   state = {
     count: 1,
-    /*convertedData: {
-      negativeEnergyAccumulator: 0,
-      signalQuality: 0
-    }, */
     noOfRegisters: 0,
     allRegisters: new Array<ConvertedData>()
   }
@@ -23,20 +19,12 @@ class ModbusReadable extends React.Component{
       this.setState({
         allRegisters:[...res.data]
       })
-      //console.log("allRegisters: ");
-      //console.log(this.state.allRegisters);
     })
 
     DataService.getNoOfRegisters()
     .then(res => {
       this.setState({noOfRegisters: res.data})
     })
-/*
-    const count = this.state.count; 
-    DataService.retrieveConvertedData(count)
-    .then(res => {
-      this.setState({convertedData:res.data});
-    }) */
   }
 
   componentDidMount(){
@@ -59,11 +47,16 @@ class ModbusReadable extends React.Component{
     }
   }
 
+  // The input data must be a number between 0 - 65535
+  // Anything else should be ignored
   validate(values: RawData){
     let errors: Partial<RawData> = {};
     let reg21: Number; 
     let reg22: Number;
     let reg92: Number;
+    // As the RawData's data type is string, it should be 
+    // converted to an integer in order to check if the  
+    // input values are within the range of the valid numbers 
     reg21 = parseInt(values.reg21, 10);
     reg22 = parseInt(values.reg22, 10);
     reg92 = parseInt(values.reg92, 10);
@@ -86,13 +79,24 @@ class ModbusReadable extends React.Component{
   }
 
   render(){
-    //let convertedData: ConvertedData;
-    //convertedData = this.state.convertedData; 
-
     let init: RawData = {
       reg21: '', reg22: '', reg92: ''
     }
 
+    // Since the main point of this project is to demonstrate that 
+    // I'm capable of parsing and converting the raw data to 
+    // human readable data, I'm not dealing with all of the 100+ registers 
+    // that are shown in http://tuftuf.gambitlabs.fi/feed.txt
+    // Here I'm focusing on parsing and converting the data of register 21, 22, and 92, 
+    // and values for those registers are to be given via the input fields 
+    // (Formik Form) that you can see below. 
+    // In those input fields, just numbers are given as input values, but
+    // when they are submitted by the onSubmit method defined above, 
+    // DataService.saveRegister() method gets called. 
+    // Please have a look at DataService.ts file as well to see that 
+    // register numbers and colons are added in front of the input values 
+    // and then they are sent to the backend via an axios.post request, 
+    // so that the backend can perform the process of parsing and converting the data.  
     return(
       <div>
         <br/>

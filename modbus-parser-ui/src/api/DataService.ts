@@ -26,6 +26,10 @@ class DataService {
   }
 
   saveRegister(rawData: RawData){
+    // Ordinarily this process is unnecessary, but 
+    // as this task's main focus is parsing the data on the backend, 
+    // here it adds a register number and colon to 
+    // each piece of data. 
     let nonParsedStrings = {
       reg21: '21:' + rawData.reg21,
       reg22: '22:' + rawData.reg22,
@@ -33,9 +37,6 @@ class DataService {
     }
 
     const formData = this.makeFormData(nonParsedStrings);
-
-    console.log("The data before sending the post request...");
-    console.log(formData);
 
     return axios.post(`${API_URL}/save-register`, formData, {
       headers: {
