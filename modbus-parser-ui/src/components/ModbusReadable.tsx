@@ -2,17 +2,17 @@ import React from 'react';
 import DataService from '../api/DataService'; 
 import ConvertedData from '../interfaces/ConvertedData.interface';
 import RawData from '../interfaces/RawData.interface';
-import { Formik, Form, Field } from 'formik'; 
+import { Formik, Form, Field, ErrorMessage } from 'formik'; 
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 class ModbusReadable extends React.Component{
 
   state = {
     count: 1,
-    convertedData: {
+    /*convertedData: {
       negativeEnergyAccumulator: 0,
       signalQuality: 0
-    }, 
+    }, */
     noOfRegisters: 0,
     allRegisters: new Array<ConvertedData>()
   }
@@ -59,13 +59,35 @@ class ModbusReadable extends React.Component{
     }
   }
 
+  validate(values: RawData){
+    let errors: Partial<RawData> = {};
+    let reg21: Number; 
+    let reg22: Number;
+    let reg92: Number;
+    reg21 = parseInt(values.reg21, 10);
+    reg22 = parseInt(values.reg22, 10);
+    reg92 = parseInt(values.reg92, 10);
+
+    const errorMsg = '⚠️You should enter a valid number (0-65535)⚠️'
+    if(!(reg21 >= 0 && reg21 <= 65535)){
+      errors.reg21 = errorMsg;
+    }
+    if(!(reg22 >= 0 && reg22 <= 65535)){
+      errors.reg22 = errorMsg;
+    }
+    if(!(reg92 >= 0 && reg92 <= 65535)){
+      errors.reg92 = errorMsg;
+    }
+    return errors; 
+  }
+
   onSubmit(values: RawData){
     DataService.saveRegister(values)
   }
 
   render(){
-    let convertedData: ConvertedData;
-    convertedData = this.state.convertedData; 
+    //let convertedData: ConvertedData;
+    //convertedData = this.state.convertedData; 
 
     let init: RawData = {
       reg21: '', reg22: '', reg92: ''
@@ -82,19 +104,25 @@ class ModbusReadable extends React.Component{
             <Formik
               initialValues = { init }
               onSubmit = {this.onSubmit}
+              validate = {this.validate}
+              validateOnChange = {false}
+              validateOnBlur = {false}
               enableReinitialize={true}
             >
               {
                 (props) => (
                   <Form>
+                    <ErrorMessage name="reg21" component="div" className="text-danger"/>
                     <div className="form-group">
-                      <Field type="text" name="reg21" placeholder="reg21" size="45"/>
+                      <Field type="text" name="reg21" placeholder="reg21: (0-65535)" size="45"/>
                     </div>
+                    <ErrorMessage name="reg22" component="div" className="text-danger"/>
                     <div className="form-group">
-                      <Field type="text" name="reg22" placeholder="reg22" size="45"/>
+                      <Field type="text" name="reg22" placeholder="reg22: (0-65535)" size="45"/>
                     </div>
+                    <ErrorMessage name="reg92" component="div" className="text-danger"/>
                     <div className="form-group">
-                      <Field type="text" name="reg92" placeholder="reg92" size="45"/>
+                      <Field type="text" name="reg92" placeholder="reg92: (0-65535)" size="45"/>
                     </div>
                     <button type="submit" className="submit-button">Submit</button>
                   </Form>

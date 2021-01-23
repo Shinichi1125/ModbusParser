@@ -16,6 +16,11 @@
   margin: auto; 
 }
 
+.text-danger {
+  color: red;
+  font-weight: bold; 
+}
+
 .submit-button {
   color: #fff;
   background-color: #007bff;
