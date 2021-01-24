@@ -62,8 +62,8 @@ public class RegisterController {
 			// when a certain number's binary version's bits are flipped and 1 is added to it, that becomes the number's two's complement.
 			// Two's complement is a number that is used to express a negative value in the binary form. 
 			// 11111111111111111111111111111111 (4294967295) - 11111111111111111111111111001000 (4294967240) flips the bits, 
-			// which makes it 110111 (55). 
-			// so in order to find out what is the value whose value is greater than that by 1 (, which is 56), perform the following subtraction 
+			// which makes it 110111 (55). When 1 is added to it (56), that is the two's complement in this case. 
+			// so in order to find out what is the value whose value is greater than that by 1, perform the following subtraction 
 			// 100000000000000000000000000000000 (4294967296) - 11111111111111111111111111001000 (4294967240).
 			
 			// When the value is returned it should be in the form of decimal, 
@@ -76,9 +76,16 @@ public class RegisterController {
 	}
 	
 	int getLowByte(int number) {
+		// EXAMPLE: When the number is 806
 		int lowByte =  0;
+		
+		// Convert the number 806 to "0000001100100110"
 		String bin = Integer.toBinaryString(number);
+		
+		// Save the right half of the string "00100110", and cut off the left half "00000011" 
 		String lowByteStr = bin.substring(bin.length() - 8);
+		
+		// Revert the string "00100110" back to an integer
 		lowByte = Integer.parseInt(lowByteStr, 2);
 		return lowByte;
 	}
