@@ -33,12 +33,41 @@ public class RegisterController {
 	}
 	
 	int combineRegisters(int reg21, int reg22) {
+		// EXAMPLE: if the values of reg21 and reg22 are 65535 and 65480, 
+		// the binary version of them will be
+		// 1111111111111111 and 1111111111001000.
+		
+		// by shifting 1111111111111111 (65535) to the left, it will be 
+		// 11111111111111110000000000000000. 
+		// and 1111111111001000(65480) should be added to it. 
 		int combined = (reg22 << 16) + reg21;
+		
+		// the combined value is 11111111111111111111111111001000 (4294967240)
 		return combined;
 	}
 	
 	int convertToSigned(int number) {
+		// EXAMPLE: if the number is 4294967240 (11111111111111111111111111001000)
+		// Check if the furthest left bit is 1 or 0. 
+		// If it's 1, the sign is minus. If it's 0, the sign is plus. 
+		
+		// Comparing 01111111111111111111111111111111 and 11111111111111111111111111001000 (4294967240)
+		// (1 << 31) equals to 10000000000000000000000000000000. 
+		// ((1 << 31) - 1) equals to 01111111111111111111111111111111
+		// 01111111111111111111111111111111 is smaller than 11111111111111111111111111001000 (4294967240)
+		// Therefore, 4294967240 has 1 as its furthest left bit, meaning that it has a minus sign. 
 		if(((1 << 31) - 1) < number) {
+			// (1 << 32) equals to 100000000000000000000000000000000.
+			// 100000000000000000000000000000000 (4294967296) - 11111111111111111111111111001000 (4294967240)
+			// when a certain number's binary version's bits are flipped and 1 is added to it, that becomes the number's two's complement.
+			// Two's complement is a number that is used to express a negative value in the binary form. 
+			// 11111111111111111111111111111111 (4294967295) - 11111111111111111111111111001000 (4294967240) flips the bits, 
+			// which makes it 110111 (55). 
+			// so in order to find out what is the value whose value is greater than that by 1 (, which is 56), perform the following subtraction 
+			// 100000000000000000000000000000000 (4294967296) - 11111111111111111111111111001000 (4294967240).
+			
+			// When the value is returned it should be in the form of decimal, 
+			// so the value is to be multiplied by (-1) to add a minus sign. 
 	    	return ((1 << 32) - number) * (-1);
 	    }
 	    else {
