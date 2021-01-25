@@ -22,7 +22,7 @@ This program converts some of the TUF-2000M Modbus data into human-readable data
 * Visualizing the data by line graphs 
 * Updating the graph without reloading the entire page (AJAX call) 
 
-# The important parts of the code (Please click each of the links below as detailed explanations are given as comments as well) 
+# The important parts of the code (Please click each of the links below, as detailed explanations are given as comments as well) 
 * How the input values are sent (as a raw string input) from the frontend
   * [ModbusReadable.tsx](https://github.com/Shinichi1125/ModbusParser/blob/master/modbus-parser-ui/src/components/ModbusReadable.tsx#L86-L99)
   * [DataService.ts](https://github.com/Shinichi1125/ModbusParser/blob/master/modbus-parser-ui/src/api/DataService.ts#L28-L46) 
