@@ -16,6 +16,7 @@ This program converts some of the TUF-2000M Modbus data into human-readable data
 
 # What this app is currently capable of
 * Allowing the user to provide input values to add a set of data 
+* Input validation (but at this moment it only validates on the frontend side, so it's not so thorough)
 * Parsing the data (taking away the register number and colon, so that only the value will remain) 
 * Converting the data to human-readable data
 * Fetching the stored data from the database and displaying it on the frontend
@@ -35,6 +36,7 @@ This program converts some of the TUF-2000M Modbus data into human-readable data
 # What I'm currently working on to brush up this project 
 * Deployment via AWS, so that you don't have to clone the project into your local device.
 * Automatically updating the graph when the submit button is clicked, so that the "Update the graph" button won't be necessary. 
+* Input validation on the backend side as well (as the backend shouldn't assume that the data that's sent from the frontend is always valid) 
 * Only displaying the latest 10 pieces of data or so. (Currently it displays all the data, so when the number of pieces of get gets big the graph can look ugly)
 * Maybe adding another page where you can check the log of all the data
 * etc 
