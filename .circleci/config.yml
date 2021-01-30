@@ -1,0 +1,84 @@
+version: 2.1
+executors:
+  awscli:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      AWS_DEFAULT_REGION: eu-north-1
+      AWS_PAGER: ""
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
+    environment:
+      - FRONTIMAGE: modbus-frontend
+      - BACKIMAGE: modbus-backend
+      - CI: ""
+    steps:
+      - checkout
+      - run:
+          name: Install tools
+          command: |
+            sudo apt update
+            sudo apt install -y nodejs npm default-jdk
+            sudo npm install n -g
+            sudo n stable
+            sudo apt purge -y nodejs npm
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            node --version
+            npm --version
+            java -version
+            docker-compose --version
+      - run:
+          name: Build Frontend Application
+          working_directory: modbus-parser-ui
+          command: |
+            npm install
+            npm run build
+            cp -rp build ../docker/frontend/build
+      - run:
+          name: Build Frontend Docker Image
+          working_directory: docker/frontend
+          command: docker build -t ${DOCKER_USER}/${FRONTIMAGE}:${CIRCLE_SHA1} .
+      - run:
+          name: Build Backend Application
+          working_directory: ModbusParserAPI
+          command: |
+            chmod +x mvnw
+            ./mvnw clean install -DskipTests
+            cp target/*.jar ../docker/backend/ROOT.jar
+      - run:
+          name: Build Backend Docker Image
+          working_directory: docker/backend
+          command: docker build -t ${DOCKER_USER}/${BACKIMAGE}:${CIRCLE_SHA1} .
+      - run:
+          name: Run Containers
+          working_directory: docker
+          command: |
+            docker-compose up -d
+      - run:
+          name: Push images
+          command: |
+            echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USER} --password-stdin
+            docker push ${DOCKER_USER}/${FRONTIMAGE}:${CIRCLE_SHA1}
+            docker push ${DOCKER_USER}/${BACKIMAGE}:${CIRCLE_SHA1}
+  deploy:
+    executor: awscli
+    steps:
+      - run:
+          name: Deploy containers
+          command: |
+            aws ssm send-command \
+              --targets Key=tag:Deploy,Values=modbusparser \
+              --document-name 'AWS-RunShellScript' \
+              --parameters 'commands=/home/ec2-user/deploy.sh '${DOCKER_USER}' '${AWS_SNS_TOPIC_ARN}' '${CIRCLE_SHA1}
+
+workflows:
+  version: 2.1
+  modbusparser-pipeline:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
