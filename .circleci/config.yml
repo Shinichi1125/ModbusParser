@@ -72,7 +72,7 @@ jobs:
             aws ssm send-command \
               --targets Key=tag:Deploy,Values=modbusparser \
               --document-name 'AWS-RunShellScript' \
-              --parameters 'commands=/home/ec2-user/deploy.sh '${DOCKER_USER}' '${AWS_SNS_TOPIC_ARN}' '${CIRCLE_SHA1}
+              --parameters 'commands=/home/ec2-user/deploy.sh '${DOCKER_USER}' '${AWS_SNS_TOPIC_ARN}' '${CIRCLE_SHA1}' '${DB_USER}' '${DB_PASSWORD}
 
 workflows:
   version: 2.1
