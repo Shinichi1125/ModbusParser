@@ -19,6 +19,8 @@ services:
     restart: always
     ports:
       - 8080:8080
+    tty: true
+    stdin_open: true
     networks:
       - modbusparser
   frontend:
