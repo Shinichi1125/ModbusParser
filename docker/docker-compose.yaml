@@ -6,10 +6,12 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: tuf
-      MYSQL_RANDOM_ROOT_PASSWORD: 'true'
+      MYSQL_ROOT_PASSWORD: password
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
+    volumes:
+      - './tuf.sql:/docker-entrypoint-initdb.d/tuf.sql'
     tty: true
     stdin_open: true
     networks:
@@ -19,8 +21,6 @@ services:
     restart: always
     ports:
       - 8080:8080
-    tty: true
-    stdin_open: true
     networks:
       - modbusparser
   frontend:

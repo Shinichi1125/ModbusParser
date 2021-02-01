@@ -10,4 +10,4 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache openjdk11-jre-headless
 
-#ENTRYPOINT ["java", "-jar", "/root/ROOT.jar"]
+ENTRYPOINT ["java", "-jar", "/root/ROOT.jar"]
