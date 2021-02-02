@@ -1,6 +1,3 @@
-
-create database tuf
-
 use tuf;
 
 CREATE TABLE register (
@@ -18,7 +15,3 @@ INSERT INTO register VALUES (NULL, 65475, 65535, 801);
 INSERT INTO register VALUES (NULL, 65490, 65535, 816);
 
 SELECT * FROM register;
-
-#DELETE FROM register WHERE id = 6;
-
-DROP TABLE register;
