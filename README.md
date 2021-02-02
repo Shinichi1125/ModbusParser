@@ -34,9 +34,9 @@ This program converts some of the TUF-2000M Modbus data into human-readable data
   * [How a new set of inputs are saved on the backend side](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L143-L169)
 
 # What I'm currently working on to brush up this project 
-* Deployment via AWS, so that you don't have to clone the project into your local device.
+* ~~Deployment via AWS, so that you don't have to clone the project into your local device.~~ (Done)
 * Automatically updating the graph when the submit button is clicked, so that the "Update the graph" button won't be necessary. 
 * Input validation on the backend side as well (as the backend shouldn't assume that the data that's sent from the frontend is always valid) 
-* Only displaying the latest 10 pieces of data or so. (Currently it displays all the data, so when the number of pieces of get gets big the graph can look ugly)
+* ~~Only displaying the latest 15 pieces of data or so. (Currently it displays all the data, so when the number of pieces of get gets big the graph can look ugly)~~ (Done)
 * Maybe adding another page where you can check the log of all the data
 * etc 
