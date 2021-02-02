@@ -7,6 +7,10 @@ class DataService {
     return axios.get(`${API_URL}/all-registers`);
   }
 
+  retrieveLatestConvertedData(){
+    return axios.get(`${API_URL}/latest-registers`);
+  }
+
   retrieveConvertedData(id: number){
     return axios.get(`${API_URL}/register/${id}`);
   } 

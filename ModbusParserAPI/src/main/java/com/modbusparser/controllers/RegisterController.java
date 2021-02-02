@@ -26,6 +26,7 @@ public class RegisterController {
 	
 	private RegisterRepository repository; 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterController.class);
+	private int latestRegisters = 16;
 	
 	@Autowired
 	RegisterController(RegisterRepository repository){
@@ -117,6 +118,28 @@ public class RegisterController {
 			ConvertedData convertedData = toHumanReadable(register);
 			convertedDataList.add(convertedData);
 		}	
+		return convertedDataList;
+	}
+	
+	@RequestMapping(value = "/latest-registers", method = RequestMethod.GET)
+	public List<ConvertedData> getLatestConvertedData() {
+		List<ConvertedData> convertedDataList = new ArrayList<ConvertedData>();
+		List<Register> registersList = repository.findAll(); 
+		
+		int arraySize = registersList.size();
+		
+		if(arraySize > latestRegisters) {
+			for(int i = arraySize - latestRegisters; i < arraySize; i++) {
+				ConvertedData convertedData = toHumanReadable(registersList.get(i));
+				convertedDataList.add(convertedData);
+			}
+		} else {
+			for(Register register: registersList) {		
+				ConvertedData convertedData = toHumanReadable(register);
+				convertedDataList.add(convertedData);
+			}	
+		}
+		
 		return convertedDataList;
 	}
 	

@@ -14,7 +14,8 @@ class ModbusReadable extends React.Component{
   }
 
   updatePage(){
-    DataService.retrieveAllConvertedData()
+    //DataService.retrieveAllConvertedData()
+    DataService.retrieveLatestConvertedData()
     .then(res => {
       this.setState({
         allRegisters:[...res.data]
