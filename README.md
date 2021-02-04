@@ -31,10 +31,10 @@ This program converts some of the TUF-2000M Modbus data into human-readable data
   * [ModbusReadable.tsx](https://github.com/Shinichi1125/ModbusParser/blob/master/modbus-parser-ui/src/components/ModbusReadable.tsx#L87-L100)
   * [DataService.ts](https://github.com/Shinichi1125/ModbusParser/blob/master/modbus-parser-ui/src/api/DataService.ts#L32-L50) 
 * How the raw strings are parsed and converted to human-readable data (RegisterController.java)
-  * [How two registers (register 21 and register 22) are combined](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L35-L47)
-  * [How to check if the return value should be given a minus sign or not](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L49-L76)
-  * [How to obtain the low bite of register 92](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L78-L91)
-  * [How a new set of inputs are saved on the backend side](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L143-L169)
+  * [How two registers (register 21 and register 22) are combined](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L36-L48)
+  * [How to check if the return value should be given a minus sign or not](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L50-L77)
+  * [How to obtain the low bite of register 92](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L79-L92)
+  * [How a new set of inputs are saved on the backend side](https://github.com/Shinichi1125/ModbusParser/blob/master/ModbusParserAPI/src/main/java/com/modbusparser/controllers/RegisterController.java#L166-L192)
 
 # What I'm currently working on to brush up this project 
 * ~~Deployment via AWS, so that you don't have to clone the project into your local device.~~ (Done)
